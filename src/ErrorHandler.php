@@ -66,13 +66,16 @@ final class ErrorHandler
       ul.exceptionList>li.exception>div.field {
         font-size: small;
         text-transform: uppercase;
-        text-decoration: underline;
         text-align: right;
         font-weight: bold;
       }
       ul.exceptionList>li.exception>div.value
       {
         font-style: italic;
+      }
+      ul.exceptionList>li.exception>div.value>ol
+      {
+        padding-left: 0;
       }
       ul.exceptionList>li.exception>div.value>ol>li
       {
