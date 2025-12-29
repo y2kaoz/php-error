@@ -62,7 +62,7 @@ final class ErrorHandler
         display: grid;
         grid-template-columns: max-content 1fr;
         gap: 0.25rem 0.5rem;
-        margin-block: 1rem;
+        margin-block: 2rem;
       }
       ul.exceptionList>li.exception>div.field {
         font-size: small;
