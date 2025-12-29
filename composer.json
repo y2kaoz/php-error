@@ -1,0 +1,24 @@
+{
+    "name": "y2kaoz/php-error",
+    "description": "Error handlers and utilities",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Y2KaoZ\\PhpError\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Y2KaoZ",
+            "email": "y2kaoz@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "vimeo/psalm": "^6.14",
+        "phpstan/phpstan": "^2.1"
+    },
+    "require": {
+        "psr/log": "^3.0"
+    }
+}
