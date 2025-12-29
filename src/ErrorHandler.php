@@ -23,18 +23,20 @@ final class ErrorHandler
     return $errors;
   }
 
-  /** @return list<array{message:string,code:int,file:string,line:int,trace:list<string>}> */
+  /** @return list<array{type:class-string,message:string,code:int,file:string,line:int,trace:list<string>}> */
   public static function FormatArray(\Throwable $throwable, null|string $removePath = null): array
   {
     $list = [];
     foreach (self::GetThrowableList($throwable) as $t) {
-      $message = "Uncaught exception: '{$t->getMessage()}'";
+      $type = get_class($t);
+      $message = "Exception: '{$t->getMessage()}'";
       $code = intval($t->getCode());
       $file = $t->getFile();
       $line = $t->getLine();
       $trace = $t->getTraceAsString();
 
       $list[] = [
+        'type' => $type,
         'message' => is_null($removePath) ? $message : str_replace($removePath, '', $message),
         'code' => $code,
         'file' => is_null($removePath) ? $file : str_replace($removePath, '', $file),
@@ -44,7 +46,7 @@ final class ErrorHandler
     }
     return $list;
   }
-  /** @param \Throwable|list<array{message:string,code:int,file:string,line:int,trace:list<string>}> $throwable*/
+  /** @param \Throwable|list<array{type:class-string,message:string,code:int,file:string,line:int,trace:list<string>}> $throwable*/
   public static function FormatHtml(array|\Throwable $throwable, null|string $removePath = null, string $json = ''): string
   {
     $throwable = $throwable instanceof \Throwable ? self::FormatArray($throwable, $removePath) : $throwable;
@@ -72,18 +74,24 @@ final class ErrorHandler
       {
         font-style: italic;
       }
+      ul.exceptionList>li.exception>div.value>ol>li
+      {
+        list-style: none;
+      }
     </style>
     STYLE;
     $html .= "\n<ul class='exceptionList'>\n";
     foreach ($throwable as $t) {
+      $type = htmlspecialchars($t['type']);
       $message = htmlspecialchars($t['message']);
       $code = $t['code'];
       $file = htmlspecialchars($t['file']);
       $line = $t['line'];
-      $trace = '<p>' . implode('</p><p>', array_map(htmlspecialchars(...), $t['trace'])) . '</p>';
+      $trace = '<ol><li>' . implode('</li><li>', array_map(htmlspecialchars(...), $t['trace'])) . '</li></ol>';
 
       $html .= <<< EOE
         <li class='exception'>
+          <div class='field'>type:</div><div class='value'>{$type}</div>
           <div class='field'>message:</div><div class='value'>{$message}</div>
           <div class='field'>code:</div><div class='value'>{$code}</div>
           <div class='field'>file:</div><div class='value'>{$file}</div>
@@ -101,7 +109,7 @@ final class ErrorHandler
     }
     return $html;
   }
-  /** @param \Throwable|list<array{message:string,code:int,file:string,line:int,trace:list<string>}> $throwable*/
+  /** @param \Throwable|list<array{type:class-string,message:string,code:int,file:string,line:int,trace:list<string>}> $throwable*/
   public static function FormatJson(array|\Throwable $throwable, null|string $removePath = null): string
   {
     $throwable = $throwable instanceof \Throwable ? self::FormatArray($throwable, $removePath) : $throwable;
