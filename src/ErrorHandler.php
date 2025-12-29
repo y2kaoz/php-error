@@ -80,7 +80,7 @@ final class ErrorHandler
       $code = $t['code'];
       $file = htmlspecialchars($t['file']);
       $line = $t['line'];
-      $trace = '<ol><li>' . implode('</li><li>', array_map(htmlspecialchars(...), $t['trace'])) . '</li></ol>';
+      $trace = '<p>' . implode('</p><p>', array_map(htmlspecialchars(...), $t['trace'])) . '</p>';
 
       $html .= <<< EOE
         <li class='exception'>
