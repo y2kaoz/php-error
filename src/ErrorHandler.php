@@ -20,7 +20,7 @@ final class ErrorHandler
       $errors[] = $throwable;
       $throwable = $throwable->getPrevious();
     }
-    return $errors;
+    return array_reverse($errors);
   }
 
   /** @return list<array{type:class-string,message:string,code:int,file:string,line:int,trace:list<string>}> */
@@ -29,7 +29,7 @@ final class ErrorHandler
     $list = [];
     foreach (self::GetThrowableList($throwable) as $t) {
       $type = get_class($t);
-      $message = "Exception: '{$t->getMessage()}'";
+      $message = $t->getMessage();
       $code = intval($t->getCode());
       $file = $t->getFile();
       $line = $t->getLine();
@@ -62,6 +62,7 @@ final class ErrorHandler
         display: grid;
         grid-template-columns: max-content 1fr;
         gap: 0.25rem 0.5rem;
+        margin-block: 1rem;
       }
       ul.exceptionList>li.exception>div.field {
         font-size: small;
