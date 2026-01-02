@@ -148,6 +148,8 @@ final class ErrorHandler
       }
       error_log($json);
       $logger->error("Uncaught exception: '{$exception->getMessage()}'", $asArray);
+      $code = $exception->getCode();
+      http_response_code(is_int($code) && $code > 0 ? $code : 500);
       echo $result;
     };
 
